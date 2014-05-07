@@ -3,14 +3,29 @@
 #coding:utf-8
 
 __metaclass__ = type
+import commands
 import configuration
 import checker
 
 class Compiler:
-	"""docstring for ClassName"""
-	def __init__(self, arg):
-		super(ClassName, self).__init__()
-		self.arg = arg
+	"""compile"""
+	def __init__(self, path):
+		self.path = path
+
+	def compile(self):
+		os.chdir(self.path)
+		status, output = commands.getstatusoutput('make')
+		if status != 0 || output.find("错误") != -1
+			print "Compile Error"
+
+	def Package(self):
+		pass
+
+	def SendDevelopEnvironment(self):
+		pass
+
+
+
 		
 def Compiler():
 	try:

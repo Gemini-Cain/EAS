@@ -36,9 +36,24 @@ class Configuration:
 		print "FILETYPE :" + file_type
 		return file_type
 
-	def GetCompileOutput(self, compile):
-		output = compile.find("OUTPUT").text
-		print "OUTPUT :" + output
+	def GetCompileOutputPath(self, compile):
+		output = compile.find("OUTPUTPATH").text
+		print "OUTPUTPATH :" + output
+		return output
+
+	def GetCompileOutputName(self, compile):
+		output = compile.find("OUTPUTNAME").text
+		print "OUTPUTNAME :" + output
+		return output
+
+	def GetCompileUsername(self, compile):
+		output = compile.find("USERNAME").text
+		print "USERNAME :" + output
+		return output
+
+	def GetCompilePassword(self, compile):
+		output = compile.find("PASSWORD").text
+		print "PASSWORD :" + output
 		return output
 
 def test():
@@ -52,5 +67,9 @@ def test():
 			config.GetCompilePath(unit)
 			config.GetCompileFileType(unit)
 			config.GetCompileOutput(unit)
+			config.GetCompileOutputPath(unit)
+			config.GetCompileOutputName(unit)
+			config.GetCompileUsername(unit)
+			config.GetCompilePassword(unit)
 
 test()
