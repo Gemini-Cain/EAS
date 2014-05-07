@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CONFIGURATION>
+	<CHECK>
+		<ORDER></ORDER>
+		<FILETYPE></FILETYPE>
+	</CHECK>
+	<COMPILEUNIT NAME='SCS'>
+		<PATH>/serv/S_SCS</PATH>
+		<OUTPUT>/lib/S_SCS.so</OUTPUT>
+		<FILETYPE>.cpp|.h</FILETYPE>
+	</COMPILEUNIT>
+	<COMPILEUNIT NAME='EBK'>
+		<PATH>/serv/S_EBK</PATH>
+		<OUTPUT>/lib/S_EBK.so</OUTPUT>
+		<FILETYPE>.cpp|.h</FILETYPE>
+	</COMPILEUNIT>
+	<COMPILEUNIT NAME='Procstep'>
+		<PATH>/serv/rsk</PATH>
+		<OUTPUT>S_RSK.so</OUTPUT>
+		<FILETYPE>.cpp|.h</FILETYPE>
+	</COMPILEUNIT>
+</CONFIGURATION>
