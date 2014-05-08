@@ -16,18 +16,23 @@ class Compiler:
 		os.chdir(self.path)
 		status, output = commands.getstatusoutput('make')
 		if status != 0 || output.find("错误") != -1
-			print "Compile Error"
+			print "Compile Error !"
 
-	def Package(self):
+	def Package(self, output):
 		pass
 
-	def SendDevelopEnvironment(self):
-		pass
+	def SendDevelopEnvironment(self, username, password, ip):
+
+		status, output = commands.getstatusoutput('scp ' + output + ' ' + username + '@' + ip + ':' + path)
+		if status != 0:
+			print "Send Error !"
+		else:
+			print "Send Success !"
 
 
 
 		
-def Compiler():
+def test():
 	try:
 		config = Configuration("C:\\Users\\bestpay\\Desktop\\configuration.xml")
 	except Exception:
