@@ -1,6 +1,6 @@
 ﻿#@Date 2014/04/02
 #@Author Xin Du
-#coding:utf-8
+#coding: utf-8
 
 __metaclass__ = type 
 
@@ -15,9 +15,9 @@ class Configuration:
 			tree = ElementTree()
 			tree.parse(self.file_name)
 			self.root = tree.getroot()
-			print tree.getroot()
 		except Exception, e:
-			print self.file_name + " 无法解析！".decode("utf-8")
+			print self.file_name + "无法解析".decode("utf-8")
+			print e
 			raise e
 
 	def GetCompileUnits(self):
@@ -26,50 +26,95 @@ class Configuration:
 		else:
 			return []
 
-	def GetCompilePath(self, compile):
-		path = compile.find("PATH").text
-		print "PATH :" + path
-		return path
+	def GetCompileUnitsName(self, compile):
+		name = compile.get("NAME")
+		if name != None:
+			print "UNITNAME :" + name
+			return name
+		else:
+			print "UNITNAME参数未配置！".decode("utf-8")
+
+	def GetCompileCodePath(self, compile):
+		code_path = compile.find("CODEPATH")
+		if code_path != None:
+			print "CODEPATH :" + code_path.text
+			return code_path.text
+		else:
+			print "CODEPATH参数未配置！".decode("utf-8")
 		
 	def GetCompileFileType(self, compile):
-		file_type = compile.find("FILETYPE").text
-		print "FILETYPE :" + file_type
-		return file_type
+		file_type = compile.find("FILETYPE")
+		if file_type != None:
+			print "FILETYPE :" + file_type.text
+			return file_type.text
+		else:
+			print "FILETYPE参数未配置！".decode("utf-8")
 
 	def GetCompileOutputPath(self, compile):
-		output = compile.find("OUTPUTPATH").text
-		print "OUTPUTPATH :" + output
-		return output
+		output_path = compile.find("OUTPUTPATH")
+		if output_path != None:
+			print "OUTPUTPATH :" + output_path.text
+			return output_path.text
+		else:
+			print "OUTPUTPATH参数未配置！".decode("utf-8")
 
 	def GetCompileOutputName(self, compile):
-		output = compile.find("OUTPUTNAME").text
-		print "OUTPUTNAME :" + output
-		return output
+		output_name = compile.find("OUTPUTNAME")
+		if output_name != None:
+			print "OUTPUTNAME :" + output_name.text
+			return output_name.text
+		else:
+			print "OUTPUTNAME参数未配置！".decode("utf-8")
+
+	def GetCompileOutputIP(self, compile):
+		output_ip = compile.find("OUTPUTIP")
+		if output_ip != None:
+			print "OUTPUTIP :" + output_ip.text
+			return output_ip.text
+		else:
+			print "OUTPUTIP参数未配置！".decode("utf-8")
 
 	def GetCompileUsername(self, compile):
-		output = compile.find("USERNAME").text
-		print "USERNAME :" + output
-		return output
+		username = compile.find("USERNAME")
+		if username != None:
+			print "USERNAME :" + username.text
+			return username.text
+		else:
+			print "USERNAME参数未配置！".decode("utf-8")
 
-	def GetCompilePassword(self, compile):
-		output = compile.find("PASSWORD").text
-		print "PASSWORD :" + output
-		return output
+	def GetCompileAppPath(self, compile):
+		app_path = compile.find("APPPATH")
+		if app_path != None:
+			print "APPPATH :" + app_path.text
+			return app_path.text
+		else:
+			print "APPPATH参数未配置！".decode("utf-8")
+
+	def GetCompilePackagePath(self, compile):
+		package_path = compile.find("PACKAGEPATH")
+		if package_path != None:
+			print "PACKAGEPATH :" + package_path.text
+			return package_path.text
+		else:
+			print "PACKAGEPATH参数未配置！".decode("utf-8")
 
 def test():
 	try:
-		config = Configuration("C:\\Users\\bestpay\\Desktop\\configuration.xml")
+		config = Configuration("./configuration.xml")
 	except Exception:
 		config = None
 
 	if config != None:
 		for unit in config.GetCompileUnits():
-			config.GetCompilePath(unit)
+			config.GetCompileUnitsName(unit)
+			config.GetCompileCodePath(unit)
 			config.GetCompileFileType(unit)
-			config.GetCompileOutput(unit)
 			config.GetCompileOutputPath(unit)
 			config.GetCompileOutputName(unit)
+			config.GetCompileOutputIP(unit)
 			config.GetCompileUsername(unit)
-			config.GetCompilePassword(unit)
+			config.GetCompileAppPath(unit)
+			config.GetCompilePackagePath(unit)
 
-test()
+if __name__ == '__main__':
+	test()
