@@ -1,12 +1,13 @@
-#@Date 2014/04/02
+﻿#@Date 2014/04/02
 #@Author Xin Du
 #coding:utf-8
 
 __metaclass__ = type
 import os
 import commands
-import configuration
 import util
+from StringIO import StringIO
+import sys
 
 class Checker:
 	"""check the difference between old and new files"""
@@ -44,7 +45,7 @@ class Checker:
 
 	def ShowFiles(self):
 		""""show all files in the path"""
-		PrintList('CODE FILE', self.file_list)
+		util.PrintList('CODE FILE', self.file_list)
 
 	def GenerateOldFilesCksum(self):
 		""""generate old files cksum"""
@@ -63,7 +64,7 @@ class Checker:
 
 	def ShowOldFilesCksum(self):
 		""""show all files cksum in the path"""
-		PrintDictionary('OLD FILES CKSUM', self.old_file_cksum)
+		util.PrintDictionary('OLD FILES CKSUM', self.old_file_cksum)
 		
 	def GenerateNewFilesCksum(self):
 		""""generate updated files cksum"""
@@ -82,12 +83,12 @@ class Checker:
 
 	def ShowNewFilesCksum(self):
 		""""show all files cksum in the path"""
-		PrintDictionary('NEW FILES CKSUM', self.new_file_cksum)
+		util.PrintDictionary('NEW FILES CKSUM', self.new_file_cksum)
 	
 	def GenerateOldOutputCksum(self):
 		""""generate old output cksum"""
 		for temp in self.output_name.split('|'):
-			temp = output_path + temp
+			temp = self.output_path + temp
 			status, output = commands.getstatusoutput('cksum ' + temp)
 			if status == 0:	
 				pos = output.find(temp)
@@ -99,12 +100,12 @@ class Checker:
 
 	def ShowOldOutputCksum(self):
 		""""show all files cksum in the path"""
-		PrintDictionary('OLD OUTPUT CKSUM', self.old_output_cksum)
+		util.PrintDictionary('OLD OUTPUT CKSUM', self.old_output_cksum)
 
 	def GenerateNewOutputCksum(self):
 		""""generate updated output cksum"""
 		for temp in self.output_name.split('|'):
-			temp = output_path + temp
+			temp = self.output_path + temp
 			status, output = commands.getstatusoutput('cksum ' + temp)
 			if status == 0:
 				pos = output.find(temp)
@@ -116,21 +117,25 @@ class Checker:
 
 	def ShowNewOutputCksum(self):
 		""""show all files cksum in the path"""
-		PrintDictionary('NEW OUTPUT CKSUM', self.new_output_cksum)
+		util.PrintDictionary('NEW OUTPUT CKSUM', self.new_output_cksum)
 	
 	def IsFilesChange(self):
-		for file in file_list:
+		for file in self.file_list:
 			if self.old_file_cksum[file] != self.new_file_cksum[file]:
 				return True
 		return False
 
 	def IsOutputChange(self):
 		for temp in self.output_name.split('|'):
+			temp = self.output_path + temp
 			if self.old_output_cksum[temp] != self.new_output_cksum[temp]:
 				return True
 		return False
 
-	def CompareCksum(self):
+	def CompareFilesCksum(self):
+		buff = StringIO()
+		temp = sys.stdout
+		sys.stdout = buff
 		print '[Cksum Compare Start]'
 		print '||' + '-' * 40 + 'Name' + '-' * 40 + '|' + '-' * 10 + 'Old Cksum' + '-' * 10 + '|' + '-' * 10 + 'New Cksum' + '-' * 10 + '|-' + 'Is Change' + '-||'
 		for item in self.file_list:
@@ -139,34 +144,53 @@ class Checker:
 		print '||' + '-' * 84 + '|' + '-' * 29 + '|' + '-' * 29 + '|' + '-' * 11 + '||'
 		print '[Cksum Compare End]'
 
-def test():
-	try:
-		config = configuration.Configuration("./configuration.xml")
-	except Exception:
-		print "error!!!"
-		config = None
+		sys.stdout = temp
+		print buff.getvalue()
+		file = open('CompareFilesCksum.txt', 'w')
+		file.write(buff.getvalue())
+		file.close()
 
-	if config != None:
-			code_path = 'D:\\Code\\DEV\\serv\\S_EBK'
-			types = '.cpp|.h|Makefile'
-			output_path = '/lib/'
-			output_name = 'S_SCS.so'
-			checker = Checker(code_path, types, output_path, output_name);
-			checker.GetAllFiles(code_path, types)
-			PrintList('File List', file_list)
-			old_file_cksum = checker.GenerateOldFilesCksum(file_list)
-			PrintDictionary('Old File Cksum', old_file_cksum)
-			new_file_cksum = checker.GenerateNewFilesCksum(file_list)
-			PrintDictionary('New File Cksum', new_file_cksum)
-			checker.CompareCksum(file_list, old_file_cksum, new_file_cksum)
-			result = checker.IsFilesChange(file_list, old_file_cksum, new_file_cksum)
-			print '[Result] : ' + str(result)
-			old_output_cksum = checker.GenerateOldOutputCksum(output_name)
-			PrintDictionary('Old Output Cksum', old_output_cksum)
-			new_output_cksum = checker.GenerateNewOutputCksum(output_name)
-			PrintDictionary('New Output Cksum', new_output_cksum)
-			result = checker.IsOutputChange(output_name, old_output_cksum, new_output_cksum)
-			print '[Result] : ' + str(result)
+	def CompareOutputCksum(self):
+		buff = StringIO()
+		temp = sys.stdout
+		sys.stdout = buff
+		print '[Cksum Compare Start]'
+		print '||' + '-' * 40 + 'Name' + '-' * 40 + '|' + '-' * 10 + 'Old Cksum' + '-' * 10 + '|' + '-' * 10 + 'New Cksum' + '-' * 10 + '|-' + 'Is Change' + '-||'
+		for item in self.output_name.split('|'):
+			item = self.output_path + item
+			result = self.old_output_cksum[item] != self.new_output_cksum[item]
+			print '||%-84s|%-29s|%-29s|%-11s||' %(item, str(self.old_output_cksum[item]), str(self.new_output_cksum[item]), str(result))
+		print '||' + '-' * 84 + '|' + '-' * 29 + '|' + '-' * 29 + '|' + '-' * 11 + '||'
+		print '[Cksum Compare End]'
+		sys.stdout = temp
+		print buff.getvalue()
+		file = open('CompareOutputCksum.txt', 'w')
+		file.write(buff.getvalue())
+		file.close()
+
+def test():
+
+	code_path = 'D:\\Code\\DEV\\serv\\S_EBK'
+	types = '.cpp|.h|Makefile'
+	output_path = '/lib/'
+	output_name = 'S_SCS.so'
+	checker = Checker(code_path, types, output_path, output_name);
+	checker.GetAllFiles()
+	checker.ShowFiles()
+	checker.GenerateOldFilesCksum()
+	checker.ShowOldFilesCksum()
+	checker.GenerateNewFilesCksum()
+	checker.ShowNewFilesCksum()
+	checker.CompareFilesCksum()
+	result = checker.IsFilesChange()
+	print '[Result] : ' + str(result)
+	checker.GenerateOldOutputCksum()
+	checker.ShowOldOutputCksum()
+	checker.GenerateNewOutputCksum()
+	checker.ShowNewOutputCksum()
+	checker.CompareOutputCksum()
+	result = checker.IsOutputChange()
+	print '[Result] : ' + str(result)
 
 
 if __name__ == '__main__':

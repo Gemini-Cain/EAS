@@ -1,9 +1,18 @@
-import stat
-import pexpect
+﻿#@Date 2014/04/02
+#@Author Xin Du
+#coding:utf-8
 
+from StringIO import StringIO
+import sys
+buff =StringIO()
 
-    child = pexpect.spawn("scp 1.cpp bppf_eas@192.168.87.3:/u1/bppf_eas")   //拷贝到本地目录
-    child.expect("bppf_eas@192.168.87.3's password:")
-    child.sendline("123456")
-    child.interact()
-    os.chmod(sqldb,stat.S_IRWXU)   //把复制到本地的database改为可读写格式
+temp = sys.stdout                               #保存标准I/O流
+sys.stdout = buff  
+for i in range(1000):
+	print '||' + '-' * 40 + 'Name' + '-' * 40 + '|'
+sys.stdout =temp                                 #恢复标准I/O流
+print buff.getvalue()
+
+file = open('test.txt', 'w')
+file.write(buff.getvalue())
+file.close()

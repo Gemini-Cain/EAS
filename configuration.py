@@ -106,15 +106,15 @@ def test():
 
 	if config != None:
 		for unit in config.GetCompileUnits():
-			config.GetCompileUnitsName(unit)
-			config.GetCompileCodePath(unit)
-			config.GetCompileFileType(unit)
-			config.GetCompileOutputPath(unit)
-			config.GetCompileOutputName(unit)
-			config.GetCompileOutputIP(unit)
-			config.GetCompileUsername(unit)
-			config.GetCompileAppPath(unit)
-			config.GetCompilePackagePath(unit)
+			unit_name = config.GetCompileUnitsName(unit)
+			code_path = config.GetCompileCodePath(unit)
+			file_type = config.GetCompileFileType(unit)
+			output_path = config.GetCompileOutputPath(unit)
+			output_name = config.GetCompileOutputName(unit)
+			output_ip = config.GetCompileOutputIP(unit)
+			username = config.GetCompileUsername(unit)
+			app_path = config.GetCompileAppPath(unit)
+			package_path = config.GetCompilePackagePath(unit)
 
 if __name__ == '__main__':
 	test()
