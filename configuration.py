@@ -1,4 +1,4 @@
-﻿#@Date 2014/04/02
+#@Date 2014/04/02
 #@Author Xin Du
 #coding: utf-8
 
@@ -115,6 +115,7 @@ def test():
 			username = config.GetCompileUsername(unit)
 			app_path = config.GetCompileAppPath(unit)
 			package_path = config.GetCompilePackagePath(unit)
+			
 
 if __name__ == '__main__':
 	test()

@@ -7,6 +7,8 @@ import util
 import checker
 import package
 import compile
+import commands
+import os
 
 def main():
 	try:
@@ -24,3 +26,20 @@ def main():
 			username = config.GetCompileUsername(unit)
 			app_path = config.GetCompileAppPath(unit)
 			package_path = config.GetCompilePackagePath(unit)
+			checker = Checker(code_path, types, output_path, output_name);
+			checker.GetAllFiles()
+			checker.ShowFiles()
+			checker.GenerateOldFilesCksum()
+			checker.ShowOldFilesCksum()
+			checker.GenerateNewFilesCksum()
+			checker.ShowNewFilesCksum()
+			checker.CompareFilesCksum()
+			result = checker.IsFilesChange()
+			print '[Result] : ' + str(result)
+			checker.GenerateOldOutputCksum()
+			checker.ShowOldOutputCksum()
+			checker.GenerateNewOutputCksum()
+			checker.ShowNewOutputCksum()
+			checker.CompareOutputCksum()
+			result = checker.IsOutputChange()
+			print '[Result] : ' + str(result)
