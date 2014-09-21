@@ -4,6 +4,14 @@
 
 import sys
 import socket
+import thread
+
+class (object):
+	"""docstring for ClassName"""
+	def __init__(self, arg):
+		super(ClassName, self).__init__()
+		self.arg = arg
+		
 
 try:
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
