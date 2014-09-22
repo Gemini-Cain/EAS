@@ -31,7 +31,7 @@ class Request:
 		ret_message = s.recv(102400)
 		return ret_message
  	
- 	def ConcurrentCall(self, thread_count, round, message):
+ 	def ConcurrentCall(thread_count, round, message):
  		for i in xrange(thread_count):
  			thread.start_new_thread(self.Call, (message))
 def test():
