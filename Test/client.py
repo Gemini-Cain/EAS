@@ -1,4 +1,4 @@
-#@Date 2014/09/16
+﻿#@Date 2014/09/16
 #@Author Xin Du
 #coding: utf-8
 
@@ -8,8 +8,8 @@ import threading
 import thread
 import os
 
-class Request(threading.Thread):
-	"""docstring for ClassName"""
+class Client(threading.Thread):
+	"""请求客户端"""
 	def __init__(self, ip, port, count, message):
 		threading.Thread.__init__(self) 
 		self.ip = ip
@@ -32,30 +32,31 @@ class Request(threading.Thread):
 			s.sendall(message.decode('utf-8'))
 		except socket.error, msg:
 			print 'Send failed:%s' %msg
-		#Now receive data
-		ret_message = ''
-		while 1:
-			try:
-				ret_message = s.recv(2048)
-			except socket.error, msg:
-				print "Received error:%s" %msg
-			if not len(ret_message):
-				break
+
+		#接收数据
+		ret_message = None
+		try:
+			ret_message = s.recv(102400)
+			#print "Call:%s\n" %ret_message
+		except socket.error, msg:
+			print "Received error:%s" %msg
 		s.close()
 
 		ret_message = '[' + self.getName() + ':' + str(i) + ']' + ret_message + '\n'
+		#print ret_message
 		return ret_message
 
  	def run(self):
  		file = open('./' + self.getName() + '.log', 'w')
  		for i in xrange(self.count):
  			ret = self.Call(self.message, i)
+ 			#print ret
  			file.write(ret)
  		file.close()
  		
 def test():
-	for i in xrange(20):
-		Request('127.0.0.1', 8588, 5, 'FFFF012345678900000118EBK000101001UU00ABCDEFGHIJKLMNOPQRSTUVWXYZ000000000020010200210004600100220018110000001000101836').start()
+	for i in xrange(50):
+		Client('192.168.87.4', 8588, 10, 'FFFF012345678900000118EBK000101001UU00ABCDEFGHIJKLMNOPQRSTUVWXYZ000000000020010200210004600100220018110000001000101836').start()
 		
 
 if __name__ == '__main__':
