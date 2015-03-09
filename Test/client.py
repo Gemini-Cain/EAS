@@ -7,6 +7,7 @@ import socket
 import threading
 import thread
 import os
+import shutil
 
 class Client(threading.Thread):
 	"""请求客户端"""
@@ -34,12 +35,17 @@ class Client(threading.Thread):
 			print 'Send failed:%s' %msg
 
 		#接收数据
-		ret_message = None
-		try:
-			ret_message = s.recv(102400)
-			#print "Call:%s\n" %ret_message
-		except socket.error, msg:
-			print "Received error:%s" %msg
+		ret_message = ''
+		while True:
+			try:
+				buff = s.recv(1024)
+				if not len(buff):
+					break
+				else:
+					ret_message += buff
+				#print "Call:%s\n" %ret_message
+			except socket.error, msg:
+				print "Received error:%s" %msg
 		s.close()
 
 		ret_message = '[' + self.getName() + ':' + str(i) + ']' + ret_message + '\n'
@@ -47,17 +53,26 @@ class Client(threading.Thread):
 		return ret_message
 
  	def run(self):
- 		file = open('./' + self.getName() + '.log', 'w')
+ 		file = open('.\\log\\' + self.getName() + '.log', 'w')
  		for i in xrange(self.count):
  			ret = self.Call(self.message, i)
- 			#print ret
+ 			print ret
  			file.write(ret)
  		file.close()
  		
 def test():
-	for i in xrange(50):
-		Client('192.168.87.4', 8588, 10, 'FFFF012345678900000118EBK000101001UU00ABCDEFGHIJKLMNOPQRSTUVWXYZ000000000020010200210004600100220018110000001000101836').start()
-		
+	path = '.\\log\\'
+	if os.path.isdir('.\\log\\'):
+		shutil.rmtree('.\\log\\')  
+ 		os.mkdir(path)
+ 	request_message = 'FFFF012345678900000118EBK000101001UU00ABCDEFGHIJKLMNOPQRSTUVWXYZ000000000020010200210004600100220018110000001000101836';
+ 	clients = []
+	for i in xrange(9):
+		c = Client('192.168.87.4', 8588, 100, request_message)
+		clients.append(c)
+
+	for i in xrange(9):
+		clients[i].start()
 
 if __name__ == '__main__':
 	test()
