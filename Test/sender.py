@@ -18,12 +18,14 @@ class Sender(threading.Thread):
 		self.port = port
 		self.count = count
 		self.message = message
+		log_path = './/log//Client//'
+		self.log = Log(log_path, self.getName())
 	
 	def Call(self, message, i):
 		try:
 			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		except socket.error, msg:
-			print '[Error] Create socket failed:%s' %msg
+			self.log. Create socket failed:%s' %msg
 
 		try:
 			s.connect((self.ip , self.port))
