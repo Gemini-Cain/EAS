@@ -1,10 +1,11 @@
-﻿#@Date 2014/09/20
+#@Date 2014/09/20
 #@Author Xin Du
 #coding: utf-8
 
+
 __metaclass__ = type 
 
-from xml.etree.ElementTree import ElementTree, Element, SubElement
+from xml.etree.ElementTree import ElementTree, Element, SubElement 
 
 class ConfigurationManager:
 	'''manage configuration'''

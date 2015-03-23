@@ -8,8 +8,9 @@ import threading
 import thread
 import os
 import shutil
+import log
 
-class Client(threading.Thread):
+class Sender(threading.Thread):
 	"""请求客户端"""
 	def __init__(self, ip, port, count, message):
 		threading.Thread.__init__(self) 
@@ -22,17 +23,17 @@ class Client(threading.Thread):
 		try:
 			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		except socket.error, msg:
-			print 'Create socket failed:%s' %msg
+			print '[Error] Create socket failed:%s' %msg
 
 		try:
 			s.connect((self.ip , self.port))
 		except socket.error, msg:
-			print 'Connect failed:%s' %msg
+			print '[Error] Connect failed:%s' %msg
 
 		try :
 			s.sendall(message.decode('utf-8'))
 		except socket.error, msg:
-			print 'Send failed:%s' %msg
+			print '[Error] Send failed:%s' %msg
 
 		#接收数据
 		ret_message = ''
@@ -45,7 +46,7 @@ class Client(threading.Thread):
 					ret_message += buff
 				#print "Call:%s\n" %ret_message
 			except socket.error, msg:
-				print "Received error:%s" %msg
+				print "[Error] Received error:%s" %msg
 		s.close()
 
 		ret_message = '[' + self.getName() + ':' + str(i) + ']' + ret_message + '\n'
@@ -62,17 +63,14 @@ class Client(threading.Thread):
  		
 def test():
 	path = '.\\log\\'
-	if os.path.isdir('.\\log\\'):
-		shutil.rmtree('.\\log\\')  
- 		os.mkdir(path)
+	if os.path.exists(path):
+		shutil.rmtree(path)  
+ 	os.mkdir(path)
  	request_message = 'FFFF012345678900000118EBK000101001UU00ABCDEFGHIJKLMNOPQRSTUVWXYZ000000000020010200210004600100220018110000001000101836';
- 	clients = []
-	for i in xrange(9):
-		c = Client('192.168.87.4', 8588, 100, request_message)
-		clients.append(c)
 
 	for i in xrange(9):
-		clients[i].start()
+		Sender('127.0.0.1', 8588, 10, request_message).start()
+
 
 if __name__ == '__main__':
 	test()
