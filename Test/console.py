@@ -18,7 +18,12 @@ class Console:
 		pass
  		
 def test():
-	raw_input("Setting Server:start server or stop server")
+	command = raw_input("Setting Server:start server or stop server")
+	if command == "start server":
+		server = Server('127.0.0.1', 8588, request_message)
+		server.StartServer()
+
+	command = raw_input("Client :start server or stop server")
 
 
 if __name__ == '__main__':

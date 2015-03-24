@@ -26,7 +26,7 @@ def main():
 			username = config.GetCompileUsername(unit)
 			app_path = config.GetCompileAppPath(unit)
 			package_path = config.GetCompilePackagePath(unit)
-			checker = Checker(code_path, types, output_path, output_name);
+			checker = Checker(code_path, types, output_path, output_name)
 			checker.GetAllFiles()
 			checker.ShowFiles()
 			checker.GenerateOldFilesCksum()
