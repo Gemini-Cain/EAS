@@ -2,21 +2,26 @@
 #@Author Xin Du
 #coding: utf-8
 
+__metaclass__ = type
+
 import socket
 import os
 import shutil
 import log
 import time
+import threading
+import thread
 
-class Server:
+class Server(threading.Thread):
 	"""服务端"""
-	def __init__(self, ip, port, message, timeout):
+	def __init__(self, server_name, ip, port, return_message, timeout):
+		threading.Thread.__init__(self, name = server_name) 
 		self.ip = ip
 		self.port = port
-		self.message = message
+		self.return_message = return_message
 		self.timeout = timeout
 		path = './/log//Server//'
-		self.log = log.Log(path, 'Server')
+		self.log = log.Log(path, server_name)
 	
 	def StartServer(self):
 		try:
@@ -34,17 +39,20 @@ class Server:
 				buff = connection.recv(10240)
 				self.log.log_info('[<--]' + buff)
 				if len(buff):
-					self.log.log_info('[-->]' + self.message)
+					self.log.log_info('[-->]' + self.return_message)
 					time.sleep(self.timeout)
-					connection.send(self.message)
+					connection.send(self.return_message)
 			except socket.timeout, msg:
 				error_message = 'Time out:' + msg
 				self.log.log_error(error_message)
 			connection.close()	
+
+	def run(self):
+		self.StartServer()
  		
 def test():
- 	request_message = 'FFFF012345678900000118EBK000101001UU00ABCDEFGHIJKLMNOPQRSTUVWXYZ000000000020010200210004600100220018110000001000101836';
-	Server('127.0.0.1', 8588, request_message, 1).StartServer()
+ 	return_message = 'FFFF012345678900000118EBK000101001UU00ABCDEFGHIJKLMNOPQRSTUVWXYZ000000000020010200210004600100220018110000001000101836';
+	Server('success_service', '127.0.0.1', 8588, return_message, 1).start()
 
 if __name__ == '__main__':
 	test()
