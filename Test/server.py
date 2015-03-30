@@ -31,10 +31,9 @@ class Server(threading.Thread):
 		except socket.error, msg:
 			error_message = 'Create socket failed:' + msg
 			self.log.log_error(error_message)
-		
-		while True:
-			connection,address = sock.accept()
-			try:
+		try:
+			while True:
+				connection,address = sock.accept()				
 				connection.settimeout(5)
 				buff = connection.recv(10240)
 				self.log.log_info('[<--]' + buff)
@@ -42,9 +41,11 @@ class Server(threading.Thread):
 					self.log.log_info('[-->]' + self.return_message)
 					time.sleep(self.timeout)
 					connection.send(self.return_message)
-			except socket.timeout, msg:
-				error_message = 'Time out:' + msg
-				self.log.log_error(error_message)
+		except socket.timeout, msg:
+			error_message = 'Time out:' + msg
+			self.log.log_error(error_message)
+		finally:
+			self.log.log_error('Close connection')
 			connection.close()	
 
 	def run(self):

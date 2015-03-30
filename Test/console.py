@@ -12,7 +12,7 @@ import server
 class Console:
 	"""控制台"""
 	def __init__(self):
-		pass
+		self.server_list = {}
 	
 	def StartServer(self, name, ip, port, return_message, timeout):
 		if name == '':
@@ -21,19 +21,36 @@ class Console:
 			ip = '127.0.0.1'
 		if port == '':
 			port = 8588
+		else:
+			port = int(port)
 		if return_message == '':
 			return_message = 'FFFF012345678900000118EBK000101001UU00ABCDEFGHIJKLMNOPQRSTUVWXYZ000000000020010200210004600100220018110000001000101836'
 		if timeout == '':
 			timeout = 1
-		server.Server(name, ip, port, return_message, timeout).StartServer()
+		else:
+			timeout = int(timeout)
+
+		if name in self.server_list.keys():
+			print '[!]Server Name Is Exist'
+		else:
+			server_thread = server.Server(name, ip, port, return_message, timeout)
+			self.server_list[name] = server_thread
+			server_thread.start()
+		
 		
 	def StopServer(self):
 		pass
+
+	def ShowServer(self):
+		for key in self.server_list.keys():
+			print key
+			
  		
 def test():
 	server_command = ('start', 'stop', 'list', 'exit')
 	server_start_command_opition= {'-n':'', '-i':'', '-p':'', '-m':'', '-t':''}
 	client_command = ()
+	console = Console()
 	while True:
 		command = raw_input("Setting opition(server, client or exit): > ")
 		if command == 'server':
@@ -47,12 +64,13 @@ def test():
 					continue
 				elif len(opition) == 1:
 					if opition[0] == server_command[2]:
-						pass
+						console.ShowServer()
+						continue
 					elif opition[0] == server_command[3]:
 						break
 					elif opition[0] == server_command[0]:
-						console = Console()
 						console.StartServer('', '', '', '', '')
+						continue
 					else:
 						print '[!]Error Input'
 						continue
@@ -77,8 +95,8 @@ def test():
 						port = server_start_command_opition['-p']
 						return_message = server_start_command_opition['-m']
 						timeout = server_start_command_opition['-t']
-						console = Console()
 						console.StartServer(name, ip, port, return_message, timeout)
+						continue
 											
 					else:
 						print '[!]Error Input'
