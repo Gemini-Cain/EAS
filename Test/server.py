@@ -9,13 +9,14 @@ import os
 import shutil
 import log
 import time
+import multiprocessing
 import threading
 import thread
 
-class Server(threading.Thread):
+class Server(multiprocessing.Process):
 	"""服务端"""
 	def __init__(self, server_name, ip, port, return_message, timeout):
-		threading.Thread.__init__(self, name = server_name) 
+		multiprocessing.Process.__init__(self, name = server_name) 
 		self.ip = ip
 		self.port = port
 		self.return_message = return_message
@@ -28,13 +29,13 @@ class Server(threading.Thread):
 			sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 			sock.bind((self.ip, self.port))
 			sock.listen(10) 
+			connection,address = sock.accept()				
+			connection.settimeout(5)
 		except socket.error, msg:
 			error_message = 'Create socket failed:' + msg
 			self.log.log_error(error_message)
 		try:
-			while True:
-				connection,address = sock.accept()				
-				connection.settimeout(5)
+			while True:				
 				buff = connection.recv(10240)
 				self.log.log_info('[<--]' + buff)
 				if len(buff):
@@ -45,7 +46,7 @@ class Server(threading.Thread):
 			error_message = 'Time out:' + msg
 			self.log.log_error(error_message)
 		finally:
-			self.log.log_error('Close connection')
+			self.log.log_info('Close connection')
 			connection.close()	
 
 	def run(self):

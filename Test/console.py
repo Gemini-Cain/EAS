@@ -36,14 +36,21 @@ class Console:
 			server_thread = server.Server(name, ip, port, return_message, timeout)
 			self.server_list[name] = server_thread
 			server_thread.start()
+
 		
 		
-	def StopServer(self):
-		pass
+	def StopServer(self, key):
+		if key in self.server_list.keys():
+			self.server_list[key].terminate()
+
 
 	def ShowServer(self):
 		for key in self.server_list.keys():
-			print key
+			if self.server_list[key].is_alive():
+				print '[' + key + '] ' + 'Run'
+			else:
+				 print '[' + key + '] ' + 'Stop'
+		print '\n'
 			
  		
 def test():
