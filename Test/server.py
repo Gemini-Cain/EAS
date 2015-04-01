@@ -17,12 +17,15 @@ class Server(multiprocessing.Process):
 	"""服务端"""
 	def __init__(self, server_name, ip, port, return_message, timeout):
 		multiprocessing.Process.__init__(self, name = server_name) 
+		print '************************'
+		print self.name
+		print '************************'
+		#print super(Server, self).pid
 		self.ip = ip
 		self.port = port
 		self.return_message = return_message
 		self.timeout = timeout
-		path = './/log//Server//'
-		self.log = log.Log(path, server_name)
+		self.log = None
 	
 	def StartServer(self):
 		try:
@@ -34,22 +37,24 @@ class Server(multiprocessing.Process):
 		except socket.error, msg:
 			error_message = 'Create socket failed:' + msg
 			self.log.log_error(error_message)
-		try:
-			while True:				
+		while True:		
+			try:		
 				buff = connection.recv(10240)
 				self.log.log_info('[<--]' + buff)
-				if len(buff):
+				if len(buff) > 0:
 					self.log.log_info('[-->]' + self.return_message)
 					time.sleep(self.timeout)
 					connection.send(self.return_message)
-		except socket.timeout, msg:
-			error_message = 'Time out:' + msg
-			self.log.log_error(error_message)
-		finally:
-			self.log.log_info('Close connection')
-			connection.close()	
+			except socket.timeout, msg:
+				error_message = 'Time out:' + str(msg)
+				self.log.log_error(error_message)
+
+		self.log.log_info('Close connection')
+		connection.close()	
 
 	def run(self):
+		path = './/log//Server//'
+		self.log = log.Log(path, self.name)
 		self.StartServer()
  		
 def test():
