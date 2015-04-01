@@ -41,7 +41,7 @@ class Sender(threading.Thread):
 			self.log.log_info('[-->]' + message)
 			s.sendall(message.decode('utf-8'))
 		except socket.error, msg:
-			error_message = 'Send failed:' + msg
+			error_message = 'Send failed:' + str(msg)
 			self.log.log_error(error_message)
 
 		#接收数据
@@ -68,7 +68,7 @@ class Sender(threading.Thread):
  		
 def test():
  	request_message = 'FFFF012345678900000118EBK000101001UU00ABCDEFGHIJKLMNOPQRSTUVWXYZ000000000020010200210004600100220018110000001000101836';
-	for i in xrange(9):
+	for i in xrange(2):
 		Sender('127.0.0.1', 8588, 10, request_message).start()
 
 if __name__ == '__main__':

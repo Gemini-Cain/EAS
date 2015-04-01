@@ -1,0 +1,16 @@
+diff a/Test/server.py b/Test/server.py	(rejected hunks)
+@@ -40,11 +40,11 @@
+ 			except socket.timeout, msg:
+ 				error_message = 'Time out:' + msg
+ 				self.log.log_error(error_message)
+-			connection.close()		
++			connection.close()	
+  		
+ def test():
+  	request_message = 'FFFF012345678900000118EBK000101001UU00ABCDEFGHIJKLMNOPQRSTUVWXYZ000000000020010200210004600100220018110000001000101836';
+-	Server('127.0.0.1', 8588, request_message, 20).StartServer()
++	Server('127.0.0.1', 8588, request_message, 1).StartServer()
+ 
+ if __name__ == '__main__':
+ 	test()
+\ No newline at end of file
