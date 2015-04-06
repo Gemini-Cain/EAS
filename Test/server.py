@@ -34,12 +34,14 @@ class Server(multiprocessing.Process):
 			connection,address = sock.accept()
 			try:	
 				connection.settimeout(5)
-				buff = connection.recv(10240)
+				buff = connection.recv(1024)
 				self.log.log_info('[<--]' + buff)
 				if len(buff) > 0:					
 					time.sleep(self.timeout)
+					print '[<--]' + buff
 					self.log.log_info('[-->]' + self.return_message)
 					connection.send(self.return_message)
+					print '[-->]' + self.return_message
 			except socket.timeout, msg:
 				connection.close()
 				error_message = 'Time out:' + str(msg)
@@ -51,6 +53,10 @@ class Server(multiprocessing.Process):
 		path = './/log//Server//'
 		self.log = log.Log(path, self.name)
 		self.StartServer()
+
+	def terminate(self):
+		self.log.close()
+		super().terminate()
  		
 def test():
  	return_message = 'FFFF012345678900000118EBK000101001UU00ABCDEFGHIJKLMNOPQRSTUVWXYZ000000000020010200210004600100220018110000001000101836';

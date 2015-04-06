@@ -26,7 +26,7 @@ class Console:
 		if return_message == '':
 			return_message = 'FFFF012345678900000118EBK000101001UU00ABCDEFGHIJKLMNOPQRSTUVWXYZ000000000020010200210004600100220018110000001000101836'
 		if timeout == '':
-			timeout = 1
+			timeout = 0
 		else:
 			timeout = int(timeout)
 
@@ -42,14 +42,16 @@ class Console:
 	def StopServer(self, key):
 		if key in self.server_list.keys():
 			self.server_list[key].terminate()
+		else:
+			print '[!] Service name is not exist'
 
 
 	def ShowServer(self):
 		for key in self.server_list.keys():
 			if self.server_list[key].is_alive():
-				print '[' + key + '] ' + 'Run'
+				print '[' + key + '] ' + 'Running'
 			else:
-				 print '[' + key + '] ' + 'Stop'
+				 print '[' + key + '] ' + 'Stopped'
 		print '\n'
 			
  		
@@ -83,7 +85,8 @@ def test():
 						continue
 				elif len(opition) == 2:
 					if opition[0] == server_command[1]:
-						pass
+						print '****************'
+						console.StopServer(opition[1])
 					else:
 						print '[!]Error Input'
 						continue
@@ -109,8 +112,8 @@ def test():
 						print '[!]Error Input'
 						continue
 
-				for item in opition:
-					print item
+				#for item in opition:
+				#	print item
 				#console = Console()
 				#console.StartServer()	
 		elif command == 'client':
