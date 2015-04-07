@@ -59,7 +59,7 @@ class Sender(threading.Thread):
 				error_message = 'Received error:' + msg
 				self.log.log_error(error_message)
 		self.log.log_info('[<--]' + ret_message)
-		print self.getName() + '[<--]' + ret_message
+		#print self.getName() + '[<--]' + ret_message
 		s.close()
 
 		return ret_message
@@ -76,7 +76,7 @@ def test():
 		sender_threads.append(Sender('127.0.0.1', 8588, 10, request_message))
 
 	for item in sender_threads:
-		print item.getName() + ' start'
+		#print item.getName() + ' start'
 		#item.setDaemon(True)
 		item.start()
 

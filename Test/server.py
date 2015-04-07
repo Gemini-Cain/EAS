@@ -38,10 +38,10 @@ class Server(multiprocessing.Process):
 				self.log.log_info('[<--]' + buff)
 				if len(buff) > 0:					
 					time.sleep(self.timeout)
-					print '[<--]' + buff
+					#print '[<--]' + buff
 					self.log.log_info('[-->]' + self.return_message)
 					connection.send(self.return_message)
-					print '[-->]' + self.return_message
+					#print '[-->]' + self.return_message
 			except socket.timeout, msg:
 				connection.close()
 				error_message = 'Time out:' + str(msg)
@@ -55,8 +55,9 @@ class Server(multiprocessing.Process):
 		self.StartServer()
 
 	def terminate(self):
-		self.log.close()
-		super().terminate()
+		if self.log is not None:
+			self.log.close()
+		super(Server, self).terminate()
  		
 def test():
  	return_message = 'FFFF012345678900000118EBK000101001UU00ABCDEFGHIJKLMNOPQRSTUVWXYZ000000000020010200210004600100220018110000001000101836';
