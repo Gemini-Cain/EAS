@@ -1,4 +1,4 @@
-﻿#@Date 2014/09/16
+#@Date 2014/09/16
 #@Author Xin Du
 #coding: utf-8
   
@@ -13,7 +13,6 @@ class Console:
 	"""控制台"""
 	def __init__(self):
 		self.server_list = {}
-		self.
 	
 	def serverSetting(self):
 		server_command = ('start', 'stop', 'list', 'exit')
@@ -180,13 +179,13 @@ class Console:
 			self.server_list[name] = server_thread
 			server_thread.start()
 		
-	def stopServer(self, key):
+	def stopSender(self, key):
 		if key in self.server_list.keys():
 			self.server_list[key].terminate()
 		else:
 			print '[!] Service name is not exist'
 
-	def showServer(self):
+	def showSender(self):
 		for key in self.server_list.keys():
 			if self.server_list[key].is_alive():
 				print '[' + key + '] ' + 'Running'
