@@ -43,7 +43,7 @@ def test():
  	job = Job('test', '127.0.0.1', 8588, 'FFFF012345678900000118EBK000101001UU00ABCDEFGHIJKLMNOPQRSTUVWXYZ000000000020010200210004600100220018110000001000101836', 10, 10)
  	job.showState()
  	job.start()
- 	job.showState()
+ 	#job.showState()
 
 if __name__ == '__main__':
 	test()

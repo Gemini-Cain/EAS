@@ -5,8 +5,6 @@
 __metaclass__ = type
 
 import socket
-import os
-import shutil
 import log
 import time
 import multiprocessing
