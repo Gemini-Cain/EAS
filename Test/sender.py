@@ -6,16 +6,15 @@ __metaclass__ = type
 
 import sys
 import socket
-import threading
-import thread
 import os
 import shutil
 import log
+import multiprocessing
 
-class Sender(threading.Thread):
+class Sender(multiprocessing.Process):
 	"""请求客户端"""
-	def __init__(self, ip, port, count, message):
-		threading.Thread.__init__(self) 
+	def __init__(self, name, ip, port, count, message):
+		multiprocessing.Process.__init__(self) 
 		self.ip = ip
 		self.port = port
 		self.count = count
